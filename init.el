@@ -29,6 +29,27 @@
 
 ;;;;;; -------------- ;;;;;;
 
+;;;;;; Perspective (Workspaces) ;;;;;;
+(unless (package-installed-p 'perspective)
+  (package-install 'perspective))
+
+(require 'perspective)
+
+(global-set-key (kbd "C-x C-b") 'persp-list-buffers)
+
+(customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
+
+;; Show buffers grouped by perspective
+(add-hook 'ibuffer-hook
+          (lambda ()
+            (persp-ibuffer-set-filter-groups)
+            (unless (eq ibuffer-sorting-mode 'alphabetic)
+              (ibuffer-do-sort-by-alphabetic))))
+
+(persp-mode)
+
+;;;;;; -------------- ;;;;;;
+
 ;;;;;; Company (Autocomplete) ;;;;;;
 
 (unless (package-installed-p 'company)
@@ -69,6 +90,7 @@
 
 ;; Buffer Bindings ;;
 (evil-leader/set-key
+  ;;"b b" 'ibuffer
   "b b" 'ibuffer
   "b n" 'next-buffer
   "b p" 'previous-buffer
@@ -82,6 +104,36 @@
   "w v" (lambda () (interactive) (split-window-right) (other-window 1))
   "w w" 'ace-window) ;; Switch between windows
 
+;; Workspace Bindings ;;
+(defun my/switch-workspace-1 () (interactive) (persp-switch-by-number 1))
+(defun my/switch-workspace-2 () (interactive) (persp-switch-by-number 2))
+(defun my/switch-workspace-3 () (interactive) (persp-switch-by-number 3))
+(defun my/switch-workspace-4 () (interactive) (persp-switch-by-number 4))
+(defun my/switch-workspace-5 () (interactive) (persp-switch-by-number 5))
+(defun my/switch-workspace-6 () (interactive) (persp-switch-by-number 6))
+(defun my/switch-workspace-7 () (interactive) (persp-switch-by-number 7))
+(defun my/switch-workspace-8 () (interactive) (persp-switch-by-number 8))
+(defun my/switch-workspace-9 () (interactive) (persp-switch-by-number 9))
+(defun my/switch-workspace-10 () (interactive) (persp-switch-by-number 10))
+
+(evil-leader/set-key
+  "p s" 'persp-switch
+  "p S" 'persp-state-save
+  "p l" 'persp-state-load
+  "p n" 'persp-next
+  "p p" 'persp-prev
+  "p k" 'persp-kill
+  "p 1" 'my/switch-workspace-1
+  "p 2" 'my/switch-workspace-2
+  "p 3" 'my/switch-workspace-3
+  "p 4" 'my/switch-workspace-4
+  "p 5" 'my/switch-workspace-5
+  "p 6" 'my/switch-workspace-6
+  "p 7" 'my/switch-workspace-7
+  "p 8" 'my/switch-workspace-8
+  "p 9" 'my/switch-workspace-9
+  "p 0" 'my/switch-workspace-10)
+
 ;; File Bindings ;;
 (defun my/open-init-file ()
   (interactive)
@@ -89,7 +141,7 @@
   
 (evil-leader/set-key
   "f i" 'my/open-init-file
-  "f o" 'find-file
+  "f f" 'find-file
   "f r" 'recentf-open-files)
 
 ;; Terminal Bindings ;;
