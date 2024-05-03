@@ -24,6 +24,9 @@
 ;; Don't create backup files
 (setq-default make-backup-files nil)
 
+;; Move cursor to help window
+(setq-default help-window-select t)
+
 ;;;;;; Recent Files ;;;;;;
 
 (require 'recentf)
