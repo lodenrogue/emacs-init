@@ -1,4 +1,5 @@
 (require 'package)
+
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
@@ -8,6 +9,10 @@
 
 ;; Open emacs in full screen
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Remove menu and tool bar
+(menu-bar-mode 0)
+(tool-bar-mode 0)
 
 ;; Font size
 (set-face-attribute 'default nil :height 150)
@@ -68,6 +73,19 @@
 
 ;;;;;; -------------- ;;;;;;
 
+;;;;;; Golden Ratio (Auto Window Resizing) ;;;;;;
+
+;;(unless (package-installed-p 'golden-ratio)
+;;(package-install 'golden-ratio))
+;;
+;;(require 'golden-ratio)
+;;
+;;(add-to-list 'golden-ratio-extra-commands 'ace-window)
+;;
+;;(golden-ratio-mode 1)
+
+;;;;;; -------------- ;;;;;;
+
 ;;;;;; Evil Leader Key ;;;;;;
 
 (unless (package-installed-p 'evil-leader)
@@ -86,11 +104,11 @@
 ;; Help Bindings ;;
 (evil-leader/set-key
   "h f" 'describe-function
-  "h k" 'describe-key) 
+  "h k" 'describe-key
+  "h v" 'describe-variable)
 
 ;; Buffer Bindings ;;
 (evil-leader/set-key
-  ;;"b b" 'ibuffer
   "b b" 'ibuffer
   "b n" 'next-buffer
   "b p" 'previous-buffer
@@ -172,6 +190,11 @@
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-normal-state-map (kbd "ZS") (lambda () (interactive) (save-buffer)))
 (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+
+(define-key evil-normal-state-map (kbd "M-v") 'yank)
+(define-key evil-insert-state-map (kbd "M-v") 'yank)
+
+(evil-set-undo-system 'undo-redo)
 
 (evil-mode 1)
 
