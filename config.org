@@ -1,0 +1,316 @@
+* Melpa Init
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+  ;; and `package-pinned-packages`. Most users will not need or want to do this.
+  ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (package-initialize)
+  (package-refresh-contents)
+#+end_src
+* Emacs App UI
+** Open emacs in full screen
+#+begin_src emacs-lisp
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+end_src
+** Remove menu and tool bar
+#+begin_src emacs-lisp
+  (menu-bar-mode 0)
+  (tool-bar-mode 0)
+#+end_src
+* Theme
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'doom-themes)
+    (package-install 'doom-themes))
+
+  (require 'doom-themes)
+#+end_src
+** Activate theme
+#+begin_src emacs-lisp
+  (load-theme 'doom-dracula :no-confirm)
+#+end_src
+** Bold and Italics
+#+begin_src emacs-lisp
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+#+end_src
+** Enable flashing mode-line on errors
+#+begin_src emacs-lisp
+  (doom-themes-visual-bell-config)
+#+end_src
+* Font Size
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :height 150)
+#+end_src
+* Line Numbers
+#+begin_src emacs-lisp
+  (setq-default display-line-numbers-type 'relative)
+  (global-display-line-numbers-mode 1)
+#+end_src
+* Files
+** Don't create backup files
+#+begin_src emacs-lisp
+  (setq-default make-backup-files nil)
+#+end_src
+** Display recent files
+#+begin_src emacs-lisp
+  (require 'recentf)
+
+  (recentf-mode 1)
+
+  (setq recentf-max-menu-items 25)
+#+end_src
+* Help
+#+begin_src emacs-lisp
+  (setq-default help-window-select t)
+#+end_src
+* Org Mode
+** Opening org files
+*** Open any .org file in org mode
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+#+end_src
+*** Open org files with accordians folded
+#+begin_src emacs-lisp
+  (setq org-startup-folded t)
+#+end_src
+** Bullets
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'org-bullets)
+    (package-install 'org-bullets))
+
+  (require 'org-bullets)
+
+  (add-hook 'org-mode-hook
+	    (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Source blocks
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+#+end_src
+
+* Ace Window (Window Switching)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'ace-window)
+    (package-install 'ace-window))
+#+end_src
+* Perspective (Workspaces)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'perspective)
+    (package-install 'perspective))
+
+  (require 'perspective)
+
+  (global-set-key (kbd "C-x C-b") 'persp-list-buffers)
+
+  (customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
+
+  (persp-mode 1)
+#+end_src
+
+** Show buffers grouped by perspective
+#+begin_src emacs-lisp
+  (add-hook 'ibuffer-hook
+	    (lambda ()
+	      (persp-ibuffer-set-filter-groups)
+	      (unless (eq ibuffer-sorting-mode 'alphabetic)
+		(ibuffer-do-sort-by-alphabetic))))
+#+end_src
+
+* Company (Autocomplete)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'company)
+    (package-install 'company))
+
+  (require 'company)
+
+  (add-hook 'after-init-hook 'global-company-mode)
+#+end_src
+* Rainbow Delimiters
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'rainbow-delimiters)
+    (package-install 'rainbow-delimiters))
+
+  (require 'rainbow-delimiters)
+
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+#+end_src
+* Evil Leader Key Bindings
+** Install (This must come before evil)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'evil-leader)
+    (package-install 'evil-leader))
+
+  (require 'evil-leader)
+
+  (global-evil-leader-mode 1)
+
+  (evil-leader/set-leader "<SPC>")
+#+end_src
+
+** Key Bindings
+*** Quit
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "q q" 'save-buffers-kill-terminal)
+#+end_src
+*** Help
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "h f" 'describe-function
+    "h k" 'describe-key
+    "h v" 'describe-variable)
+#+end_src
+*** Buffer
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "b b" 'ibuffer
+    "b n" 'next-buffer
+    "b p" 'previous-buffer
+    "b k" 'kill-buffer)
+#+end_src
+*** Window 
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "w 1" 'delete-other-windows
+    "w k" 'delete-window
+    "w h" (lambda () (interactive) (split-window-below) (other-window 1))
+    "w v" (lambda () (interactive) (split-window-right) (other-window 1))
+    "w w" 'ace-window) ;; Switch between windows
+#+end_src
+*** Org mode
+Open web links in browser
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o l" 'org-open-at-point)
+#+end_src
+*** Workspace
+#+begin_src emacs-lisp
+  (defun my/switch-workspace-1 () "Switch to workspace 1" (interactive) (persp-switch-by-number 1))
+  (defun my/switch-workspace-2 () "Switch to workspace 2" (interactive) (persp-switch-by-number 2))
+  (defun my/switch-workspace-3 () "Switch to workspace 3" (interactive) (persp-switch-by-number 3))
+  (defun my/switch-workspace-4 () "Switch to workspace 4" (interactive) (persp-switch-by-number 4))
+  (defun my/switch-workspace-5 () "Switch to workspace 5" (interactive) (persp-switch-by-number 5))
+  (defun my/switch-workspace-6 () "Switch to workspace 6" (interactive) (persp-switch-by-number 6))
+  (defun my/switch-workspace-7 () "Switch to workspace 7" (interactive) (persp-switch-by-number 7))
+  (defun my/switch-workspace-8 () "Switch to workspace 8" (interactive) (persp-switch-by-number 8))
+  (defun my/switch-workspace-9 () "Switch to workspace 9" (interactive) (persp-switch-by-number 9))
+  (defun my/switch-workspace-10 () "Switch to workspace 10" (interactive) (persp-switch-by-number 10))
+
+  (evil-leader/set-key
+    "p s" 'persp-switch
+    "p S" 'persp-state-save
+    "p l" 'persp-state-load
+    "p n" 'persp-next
+    "p p" 'persp-prev
+    "p k" 'persp-kill
+    "p 1" 'my/switch-workspace-1
+    "p 2" 'my/switch-workspace-2
+    "p 3" 'my/switch-workspace-3
+    "p 4" 'my/switch-workspace-4
+    "p 5" 'my/switch-workspace-5
+    "p 6" 'my/switch-workspace-6
+    "p 7" 'my/switch-workspace-7
+    "p 8" 'my/switch-workspace-8
+    "p 9" 'my/switch-workspace-9
+    "p 0" 'my/switch-workspace-10)
+#+end_src
+
+*** File
+#+begin_src emacs-lisp
+  (defun my/open-init-file ()
+    "Open init.el file."
+    (interactive)
+    (find-file "~/.emacs.d/init.el"))
+  
+  (evil-leader/set-key
+    "f i" 'my/open-init-file
+    "f f" 'find-file
+    "f r" 'recentf-open-files)
+#+end_src
+*** Terminal
+#+begin_src emacs-lisp
+  (defun my/create-shell ()
+    "Create a shell buffer with a unique name."
+    (interactive)
+    (shell (concat "*shell-" (number-to-string (round (* 1000.0 (float-time (current-time))))) "*")))
+
+  (defun my/create-small-shell ()
+    "Create a shell buffer in a window below current buffer."
+    (interactive)
+    (split-window-below)
+    (other-window 1)
+    (my/create-shell))
+
+  (evil-leader/set-key
+    "t s" 'my/create-small-shell
+    "t t" 'my/create-shell)
+#+end_src
+
+* Evil Mode
+** Install
+#+begin_src emacs-lisp
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+
+(require 'evil)
+
+(evil-mode 1)
+#+end_src
+
+** Activate redo
+#+begin_src emacs-lisp
+  (evil-set-undo-system 'undo-redo)
+#+end_src
+** Key bindings
+*** Scrolling up
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+#+end_src
+*** Save file
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "ZS") (lambda () (interactive) (save-buffer)))
+#+end_src
+*** Open org accordians
+#+begin_src emacs-lisp
+  (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+#+end_src
+
+*** Paste
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "M-v") 'yank)
+  (define-key evil-insert-state-map (kbd "M-v") 'yank)
+#+end_src
+
+* Which Key (Key Binding Suggestions)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'which-key)
+    (package-install 'which-key))
+
+  (require 'which-key)
+
+  (which-key-mode 1)
+#+end_src
+* Vertico (List Suggestions)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'vertico)
+    (package-install 'vertico))
+
+  (require 'vertico)
+
+  (vertico-mode 1)
+#+end_src
+
+* Marginalia (Suggestion Hints)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'marginalia)
+    (package-install 'marginalia))
+
+  (require 'marginalia)
+
+  (marginalia-mode 1)
+#+end_src
