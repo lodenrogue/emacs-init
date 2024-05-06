@@ -1,4 +1,4 @@
-* Melpa Init
+* Melpa
 #+begin_src emacs-lisp
   (require 'package)
 
@@ -65,6 +65,15 @@
 * Help
 #+begin_src emacs-lisp
   (setq-default help-window-select t)
+#+end_src
+* Abbreviations
+** Python
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook 'abbrev-mode)
+
+  (define-abbrev-table 'python-mode-abbrev-table
+    '(("ifnem" "if __name__ == \"__main__\":")
+      ("dinit" "def __init__(self):")))
 #+end_src
 * Org Mode
 ** Opening org files
@@ -170,7 +179,9 @@
   (evil-leader/set-key
     "b b" 'ibuffer
     "b n" 'next-buffer
+    "<right>" 'next-buffer
     "b p" 'previous-buffer
+    "<left>" 'previous-buffer
     "b k" 'kill-buffer)
 #+end_src
 *** Window 
@@ -225,7 +236,7 @@ Open web links in browser
   (defun my/open-init-file ()
     "Open init.el file."
     (interactive)
-    (find-file "~/.emacs.d/init.el"))
+    (find-file "~/.emacs.d/config.org"))
   
   (evil-leader/set-key
     "f i" 'my/open-init-file
@@ -237,7 +248,8 @@ Open web links in browser
   (defun my/create-shell ()
     "Create a shell buffer with a unique name."
     (interactive)
-    (shell (concat "*shell-" (number-to-string (round (* 1000.0 (float-time (current-time))))) "*")))
+    (shell (generate-new-buffer-name "*shell*")))
+
 
   (defun my/create-small-shell ()
     "Create a shell buffer in a window below current buffer."
@@ -249,6 +261,17 @@ Open web links in browser
   (evil-leader/set-key
     "t s" 'my/create-small-shell
     "t t" 'my/create-shell)
+#+end_src
+*** Software
+#+begin_src emacs-lisp
+  (defun my/upgrade ()
+    "Upgrade packages and remove packages that are no longer needed"
+    (interactive)
+    (package-upgrade-all)
+    (package-autoremove))
+
+  (evil-leader/set-key
+    "s u" 'my/upgrade)
 #+end_src
 
 * Evil Mode
