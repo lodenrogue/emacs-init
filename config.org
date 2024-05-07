@@ -66,15 +66,6 @@
 #+begin_src emacs-lisp
   (setq-default help-window-select t)
 #+end_src
-* Abbreviations
-** Python
-#+begin_src emacs-lisp
-  (add-hook 'python-mode-hook 'abbrev-mode)
-
-  (define-abbrev-table 'python-mode-abbrev-table
-    '(("ifnem" "if __name__ == \"__main__\":")
-      ("dinit" "def __init__(self):")))
-#+end_src
 * Org Mode
 ** Opening org files
 *** Open any .org file in org mode
@@ -101,6 +92,17 @@
   (require 'org-tempo)
 #+end_src
 
+* Abbreviations
+** Python
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook 'abbrev-mode)
+
+  (define-abbrev-table 'python-mode-abbrev-table
+    '(("ifnem" "if __name__ == \"__main__\":")
+      ("dinit" "def __init__(self):")))
+
+  (setq save-abbrevs nil)
+#+end_src
 * Ace Window (Window Switching)
 #+begin_src emacs-lisp
   (unless (package-installed-p 'ace-window)
@@ -148,6 +150,40 @@
 
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
+* Elfeed (RSS Reader)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'elfeed)
+    (package-install 'elfeed))
+
+  (require 'elfeed)
+#+end_src
+** RSS Feeds
+#+begin_src emacs-lisp
+  (setq elfeed-feeds
+	  '("https://protesilaos.com/codelog.xml"))
+
+  (elfeed-update)
+#+end_src
+* Consult (Completions with Previews)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'consult)
+    (package-install 'consult))
+
+  (require 'consult)
+#+end_src
+* Orderless (Fuzzy Matching)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'orderless)
+    (package-install 'orderless))
+
+  (require 'orderless)
+  (setq completion-styles '(orderless basic)
+	completion-category-overrides '((file (styles basic partial-completion))))
+
+#+end_src
 * Evil Leader Key Bindings
 ** Install (This must come before evil)
 #+begin_src emacs-lisp
@@ -172,12 +208,13 @@
   (evil-leader/set-key
     "h f" 'describe-function
     "h k" 'describe-key
-    "h v" 'describe-variable)
+    "h v" 'describe-variable
+    "h m" 'describe-mode)
 #+end_src
 *** Buffer
 #+begin_src emacs-lisp
   (evil-leader/set-key
-    "b b" 'ibuffer
+    "b b" 'consult-buffer
     "b n" 'next-buffer
     "<right>" 'next-buffer
     "b p" 'previous-buffer
@@ -273,16 +310,23 @@ Open web links in browser
   (evil-leader/set-key
     "s u" 'my/upgrade)
 #+end_src
+*** Search
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "/" 'consult-line)
+#+end_src
 
 * Evil Mode
 ** Install
 #+begin_src emacs-lisp
-(unless (package-installed-p 'evil)
-  (package-install 'evil))
+  (unless (package-installed-p 'evil)
+    (package-install 'evil))
 
-(require 'evil)
+  (setq evil-want-C-i-jump nil)
 
-(evil-mode 1)
+  (require 'evil)
+
+  (evil-mode 1)
 #+end_src
 
 ** Activate redo
@@ -309,6 +353,16 @@ Open web links in browser
   (define-key evil-insert-state-map (kbd "M-v") 'yank)
 #+end_src
 
+*** Elfeed
+#+begin_src emacs-lisp
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "u") #'elfeed-search-tag-all-unread)
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "r") #'elfeed-search-untag-all-unread)
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "q") #'elfeed-kill-buffer)
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "<RET>") #'elfeed-search-show-entry) 
+
+  (evil-define-key 'normal elfeed-show-mode-map (kbd "q") #'elfeed-kill-buffer)
+  (evil-define-key 'normal elfeed-show-mode-map (kbd "<tab>") #'elfeed-show-next-link)
+#+end_src
 * Which Key (Key Binding Suggestions)
 #+begin_src emacs-lisp
   (unless (package-installed-p 'which-key)
@@ -319,6 +373,7 @@ Open web links in browser
   (which-key-mode 1)
 #+end_src
 * Vertico (List Suggestions)
+** Install
 #+begin_src emacs-lisp
   (unless (package-installed-p 'vertico)
     (package-install 'vertico))
@@ -327,7 +382,10 @@ Open web links in browser
 
   (vertico-mode 1)
 #+end_src
-
+** Cycle results
+#+begin_src emacs-lisp
+  (setq vertico-cycle 1)
+#+end_src
 * Marginalia (Suggestion Hints)
 #+begin_src emacs-lisp
   (unless (package-installed-p 'marginalia)
@@ -337,3 +395,4 @@ Open web links in browser
 
   (marginalia-mode 1)
 #+end_src
+
