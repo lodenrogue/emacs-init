@@ -54,13 +54,19 @@
 #+begin_src emacs-lisp
   (setq-default make-backup-files nil)
 #+end_src
-** Display recent files
+** Recent files
+*** Display recent files
 #+begin_src emacs-lisp
   (require 'recentf)
 
   (recentf-mode 1)
 
   (setq recentf-max-menu-items 25)
+#+end_src
+*** Ignore files
+#+begin_src emacs-lisp
+  (add-to-list 'recentf-exclude
+	       (recentf-expand-file-name "~/.elfeed/index"))
 #+end_src
 * Help
 #+begin_src emacs-lisp
@@ -215,6 +221,7 @@
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "b b" 'consult-buffer
+    "b i" 'ibuffer
     "b n" 'next-buffer
     "<right>" 'next-buffer
     "b p" 'previous-buffer
@@ -311,11 +318,33 @@ Open web links in browser
     "s u" 'my/upgrade)
 #+end_src
 *** Search
+**** Buffer
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "/" 'consult-line)
 #+end_src
+**** Google
+Search google for selected text
+#+begin_src emacs-lisp
+  (defun my/grab-selected-text ()
+    "Grab the text selected in visual mode and return it as a string."
+    (interactive)
+    (when (region-active-p)
+      (let ((start (region-beginning))
+	    (end (region-end)))
+	(buffer-substring-no-properties start end))))
 
+  (defun my/google-search ()
+    "Use google search on selected text"
+    (interactive)
+    (let ((selected-text (my/grab-selected-text)))
+      (if selected-text
+	(browse-url (format "https://google.com/search?q=%s" (url-hexify-string selected-text)))
+	(error "Error: No text selected to search"))))
+
+  (evil-leader/set-key
+    "g s" 'my/google-search)
+#+end_src
 * Evil Mode
 ** Install
 #+begin_src emacs-lisp
