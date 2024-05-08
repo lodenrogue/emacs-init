@@ -167,7 +167,8 @@
 ** RSS Feeds
 #+begin_src emacs-lisp
   (setq elfeed-feeds
-	  '("https://protesilaos.com/codelog.xml"))
+	'("https://protesilaos.com/codelog.xml"
+	  "https://hnrss.org/frontpage"))
 
   (elfeed-update)
 #+end_src
@@ -238,10 +239,21 @@
     "w w" 'ace-window) ;; Switch between windows
 #+end_src
 *** Org mode
-Open web links in browser
+**** Open link in browser
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "o l" 'org-open-at-point)
+#+end_src
+**** Open section in new buffer
+#+begin_src emacs-lisp
+  (defun my/open-section-in-new-buffer ()
+    "Open org section in new buffer"
+    (interactive)
+    (org-tree-to-indirect-buffer)
+    (other-window 1))
+
+  (evil-leader/set-key
+    "o v" 'my/open-section-in-new-buffer)
 #+end_src
 *** Workspace
 #+begin_src emacs-lisp
@@ -344,6 +356,18 @@ Search google for selected text
 
   (evil-leader/set-key
     "g s" 'my/google-search)
+#+end_src
+*** Programming
+#+begin_src emacs-lisp
+  (defun my/toggle-view-code-block()
+    "Open code block at point in a new window"
+    (interactive)
+    (if (buffer-narrowed-p)
+	(widen)
+    (narrow-to-defun)))
+
+  (evil-leader/set-key
+    "c v" 'my/toggle-view-code-block)
 #+end_src
 * Evil Mode
 ** Install
