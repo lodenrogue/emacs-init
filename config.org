@@ -360,7 +360,7 @@ Search google for selected text
 *** Programming
 #+begin_src emacs-lisp
   (defun my/toggle-view-code-block()
-    "Open code block at point in a new window"
+    "Toggle narrowing on code block"
     (interactive)
     (if (buffer-narrowed-p)
 	(widen)
