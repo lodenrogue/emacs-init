@@ -361,6 +361,19 @@ Search google for selected text
   (evil-leader/set-key-for-mode 'python-mode
     "r p" 'my/run-file-as-python)
 #+end_src
+*** Bash
+#+begin_src emacs-lisp
+  (defun my/run-file-as-bash ()
+    "Run the current file as a bash script"
+    (interactive)
+    (let ((bash-file-buffer-name (buffer-file-name))
+	  (bash-script-arguments (read-string "Arguments: ")))
+      (shell-command (concat "export PATH=$PATH:~/bin && bash " bash-file-buffer-name " " bash-script-arguments) "*Bash Output*")))
+
+  (evil-leader/set-key-for-mode 'sh-mode
+    "r b" 'my/run-file-as-bash)
+#+end_src
+
 * Fuzzy Matching
 ** Install
 #+begin_src emacs-lisp
