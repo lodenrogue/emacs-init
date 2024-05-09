@@ -9,7 +9,7 @@
   (package-initialize)
   (package-refresh-contents)
 #+end_src
-* Emacs App UI
+* App
 ** Open emacs in full screen
 #+begin_src emacs-lisp
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -18,6 +18,11 @@
 #+begin_src emacs-lisp
   (menu-bar-mode 0)
   (tool-bar-mode 0)
+#+end_src
+** Quit
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "q q" 'save-buffers-kill-terminal)
 #+end_src
 * Theme
 ** Install
@@ -49,13 +54,23 @@
   (setq-default display-line-numbers-type 'relative)
   (global-display-line-numbers-mode 1)
 #+end_src
-* Files
+* Rainbow Delimiters
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'rainbow-delimiters)
+    (package-install 'rainbow-delimiters))
+
+  (require 'rainbow-delimiters)
+
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+#+end_src
+* File
 ** Don't create backup files
 #+begin_src emacs-lisp
   (setq-default make-backup-files nil)
+  (auto-save-mode -1)
 #+end_src
 ** Recent files
-*** Display recent files
+*** Configure recent files
 #+begin_src emacs-lisp
   (require 'recentf)
 
@@ -68,54 +83,57 @@
   (add-to-list 'recentf-exclude
 	       (recentf-expand-file-name "~/.elfeed/index"))
 #+end_src
-* Help
+** Key Bindings
+*** Open Init File
 #+begin_src emacs-lisp
-  (setq-default help-window-select t)
+  (defun my/open-init-file ()
+    "Open init.el file."
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+
+  (evil-leader/set-key
+    "f i" 'my/open-init-file)
 #+end_src
-* Org Mode
-** Opening org files
-*** Open any .org file in org mode
+*** Find File
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+  (evil-leader/set-key
+    "f f" 'find-file
+    "f r" 'consult-recent-file)
 #+end_src
-*** Open org files with accordians folded
+* Buffer
+** Key Bindings
 #+begin_src emacs-lisp
-  (setq org-startup-folded t)
+  (evil-leader/set-key
+    "b b" 'consult-buffer
+    "b i" 'ibuffer
+    "b n" 'next-buffer
+    "<right>" 'next-buffer
+    "b p" 'previous-buffer
+    "<left>" 'previous-buffer
+    "b k" 'kill-buffer)
 #+end_src
-** Bullets
+** Search Buffer
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'org-bullets)
-    (package-install 'org-bullets))
-
-  (require 'org-bullets)
-
-  (add-hook 'org-mode-hook
-	    (lambda () (org-bullets-mode 1)))
+  (evil-leader/set-key
+    "/" 'consult-line)
 #+end_src
-
-** Source blocks
-#+begin_src emacs-lisp
-  (require 'org-tempo)
-#+end_src
-
-* Abbreviations
-** Python
-#+begin_src emacs-lisp
-  (add-hook 'python-mode-hook 'abbrev-mode)
-
-  (define-abbrev-table 'python-mode-abbrev-table
-    '(("ifnem" "if __name__ == \"__main__\":")
-      ("dinit" "def __init__(self):")))
-
-  (setq save-abbrevs nil)
-#+end_src
-* Ace Window (Window Switching)
+* Window
+** Install Ace Window
 #+begin_src emacs-lisp
   (unless (package-installed-p 'ace-window)
     (package-install 'ace-window))
 #+end_src
-* Perspective (Workspaces)
-** Install
+** Key Bindings
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "w 1" 'delete-other-windows
+    "w k" 'delete-window
+    "w h" (lambda () (interactive) (split-window-below) (other-window 1))
+    "w v" (lambda () (interactive) (split-window-right) (other-window 1))
+    "w w" 'ace-window) ;; Switch between windows
+#+end_src
+* Workspaces
+** Install Perspective
 #+begin_src emacs-lisp
   (unless (package-installed-p 'perspective)
     (package-install 'perspective))
@@ -137,125 +155,7 @@
 	      (unless (eq ibuffer-sorting-mode 'alphabetic)
 		(ibuffer-do-sort-by-alphabetic))))
 #+end_src
-
-* Company (Autocomplete)
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'company)
-    (package-install 'company))
-
-  (require 'company)
-
-  (add-hook 'after-init-hook 'global-company-mode)
-#+end_src
-* Rainbow Delimiters
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'rainbow-delimiters)
-    (package-install 'rainbow-delimiters))
-
-  (require 'rainbow-delimiters)
-
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-#+end_src
-* Elfeed (RSS Reader)
-** Install
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'elfeed)
-    (package-install 'elfeed))
-
-  (require 'elfeed)
-#+end_src
-** RSS Feeds
-#+begin_src emacs-lisp
-  (setq elfeed-feeds
-	'("https://protesilaos.com/codelog.xml"
-	  "https://hnrss.org/frontpage"))
-
-  (elfeed-update)
-#+end_src
-* Consult (Completions with Previews)
-** Install
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'consult)
-    (package-install 'consult))
-
-  (require 'consult)
-#+end_src
-* Orderless (Fuzzy Matching)
-** Install
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'orderless)
-    (package-install 'orderless))
-
-  (require 'orderless)
-  (setq completion-styles '(orderless basic)
-	completion-category-overrides '((file (styles basic partial-completion))))
-
-#+end_src
-* Evil Leader Key Bindings
-** Install (This must come before evil)
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'evil-leader)
-    (package-install 'evil-leader))
-
-  (require 'evil-leader)
-
-  (global-evil-leader-mode 1)
-
-  (evil-leader/set-leader "<SPC>")
-#+end_src
-
 ** Key Bindings
-*** Quit
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "q q" 'save-buffers-kill-terminal)
-#+end_src
-*** Help
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "h f" 'describe-function
-    "h k" 'describe-key
-    "h v" 'describe-variable
-    "h m" 'describe-mode)
-#+end_src
-*** Buffer
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "b b" 'consult-buffer
-    "b i" 'ibuffer
-    "b n" 'next-buffer
-    "<right>" 'next-buffer
-    "b p" 'previous-buffer
-    "<left>" 'previous-buffer
-    "b k" 'kill-buffer)
-#+end_src
-*** Window 
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "w 1" 'delete-other-windows
-    "w k" 'delete-window
-    "w h" (lambda () (interactive) (split-window-below) (other-window 1))
-    "w v" (lambda () (interactive) (split-window-right) (other-window 1))
-    "w w" 'ace-window) ;; Switch between windows
-#+end_src
-*** Org mode
-**** Open link in browser
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "o l" 'org-open-at-point)
-#+end_src
-**** Open section in new buffer
-#+begin_src emacs-lisp
-  (defun my/open-section-in-new-buffer ()
-    "Open org section in new buffer"
-    (interactive)
-    (org-tree-to-indirect-buffer)
-    (other-window 1))
-
-  (evil-leader/set-key
-    "o v" 'my/open-section-in-new-buffer)
-#+end_src
-*** Workspace
 #+begin_src emacs-lisp
   (defun my/switch-workspace-1 () "Switch to workspace 1" (interactive) (persp-switch-by-number 1))
   (defun my/switch-workspace-2 () "Switch to workspace 2" (interactive) (persp-switch-by-number 2))
@@ -287,25 +187,118 @@
     "p 0" 'my/switch-workspace-10)
 #+end_src
 
-*** File
+* Help
+** Select Help Window When Opening
 #+begin_src emacs-lisp
-  (defun my/open-init-file ()
-    "Open init.el file."
-    (interactive)
-    (find-file "~/.emacs.d/config.org"))
-  
-  (evil-leader/set-key
-    "f i" 'my/open-init-file
-    "f f" 'find-file
-    "f r" 'recentf-open-files)
+  (setq-default help-window-select t)
 #+end_src
-*** Terminal
+** Key Bindings
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "h f" 'describe-function
+    "h k" 'describe-key
+    "h v" 'describe-variable
+    "h m" 'describe-mode)
+#+end_src
+* Software
+** Key Bindings
+#+begin_src emacs-lisp
+  (defun my/upgrade ()
+    "Upgrade packages and remove packages that are no longer needed"
+    (interactive)
+    (package-upgrade-all)
+    (package-autoremove))
+
+  (evil-leader/set-key
+    "s u" 'my/upgrade)
+#+end_src
+* Org Mode
+** Opening org files
+*** Open any .org file in org mode
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+#+end_src
+*** Open org files with accordians folded
+#+begin_src emacs-lisp
+  (setq org-startup-folded t)
+#+end_src
+** Bullets
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'org-bullets)
+    (package-install 'org-bullets))
+
+  (require 'org-bullets)
+
+  (add-hook 'org-mode-hook
+	    (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Source blocks
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+#+end_src
+
+** Key Bindings
+**** Open link in browser
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o l" 'org-open-at-point)
+#+end_src
+**** Open section in new buffer
+#+begin_src emacs-lisp
+  (defun my/open-section-in-new-buffer ()
+    "Open org section in new buffer"
+    (interactive)
+    (org-tree-to-indirect-buffer)
+    (other-window 1))
+
+  (evil-leader/set-key
+    "o v" 'my/open-section-in-new-buffer)
+#+end_src
+* Abbreviations
+** Python
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook 'abbrev-mode)
+
+  (define-abbrev-table 'python-mode-abbrev-table
+    '(("ifnem" "if __name__ == \"__main__\":")
+      ("dinit" "def __init__(self):")))
+
+  (setq save-abbrevs nil)
+#+end_src
+* Autocomplete
+** Install Company
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'company)
+    (package-install 'company))
+
+  (require 'company)
+
+  (add-hook 'after-init-hook 'global-company-mode)
+#+end_src
+* RSS Reader
+** Install Elfeed
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'elfeed)
+    (package-install 'elfeed))
+
+  (require 'elfeed)
+#+end_src
+** Feeds
+#+begin_src emacs-lisp
+  (setq elfeed-feeds
+	'("https://protesilaos.com/master.xml"
+	  "https://hnrss.org/frontpage"))
+
+  (elfeed-update)
+#+end_src
+* Terminal
+** Key Bindings
 #+begin_src emacs-lisp
   (defun my/create-shell ()
     "Create a shell buffer with a unique name."
     (interactive)
     (shell (generate-new-buffer-name "*shell*")))
-
 
   (defun my/create-small-shell ()
     "Create a shell buffer in a window below current buffer."
@@ -318,24 +311,9 @@
     "t s" 'my/create-small-shell
     "t t" 'my/create-shell)
 #+end_src
-*** Software
-#+begin_src emacs-lisp
-  (defun my/upgrade ()
-    "Upgrade packages and remove packages that are no longer needed"
-    (interactive)
-    (package-upgrade-all)
-    (package-autoremove))
-
-  (evil-leader/set-key
-    "s u" 'my/upgrade)
-#+end_src
-*** Search
-**** Buffer
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "/" 'consult-line)
-#+end_src
-**** Google
+* Web
+** Key Bindings
+*** Search Google
 Search google for selected text
 #+begin_src emacs-lisp
   (defun my/grab-selected-text ()
@@ -357,7 +335,9 @@ Search google for selected text
   (evil-leader/set-key
     "g s" 'my/google-search)
 #+end_src
-*** Programming
+* Programming
+** Key Bindings
+*** Toggle View Code Block
 #+begin_src emacs-lisp
   (defun my/toggle-view-code-block()
     "Toggle narrowing on code block"
@@ -368,6 +348,39 @@ Search google for selected text
 
   (evil-leader/set-key
     "c v" 'my/toggle-view-code-block)
+#+end_src
+* Fuzzy Matching
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'orderless)
+    (package-install 'orderless))
+
+  (require 'orderless)
+  (setq completion-styles '(orderless basic)
+	completion-category-overrides '((file (styles basic partial-completion))))
+#+end_src
+* Evil Leader Key Bindings
+** Install (This must come before evil)
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'evil-leader)
+    (package-install 'evil-leader))
+
+  (require 'evil-leader)
+
+  (global-evil-leader-mode 1)
+
+#+end_src
+** Set Leader Key
+#+begin_src emacs-lisp
+  (evil-leader/set-leader "<SPC>")
+#+end_src
+* Consult (Completions with Previews)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'consult)
+    (package-install 'consult))
+
+  (require 'consult)
 #+end_src
 * Evil Mode
 ** Install
