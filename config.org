@@ -349,6 +349,18 @@ Search google for selected text
   (evil-leader/set-key
     "c v" 'my/toggle-view-code-block)
 #+end_src
+*** Python
+#+begin_src emacs-lisp
+  (defun my/run-file-as-python ()
+    "Run the current file as a python script"
+    (interactive)
+    (let ((python-file-buffer-name (buffer-file-name))
+	  (python-script-arguments (read-string "Arguments: ")))
+      (shell-command (concat "python3 " python-file-buffer-name " " python-script-arguments) "*Python Output*")))
+
+  (evil-leader/set-key-for-mode 'python-mode
+    "r p" 'my/run-file-as-python)
+#+end_src
 * Fuzzy Matching
 ** Install
 #+begin_src emacs-lisp
