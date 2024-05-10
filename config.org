@@ -2,13 +2,29 @@
 #+begin_src emacs-lisp
   (require 'package)
 
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  ;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
   ;; and `package-pinned-packages`. Most users will not need or want to do this.
-  ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (package-initialize)
   (package-refresh-contents)
 #+end_src
+* Evil Leader (This must come before evil)
+** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'evil-leader)
+    (package-install 'evil-leader))
+
+  (require 'evil-leader)
+
+  (global-evil-leader-mode 1)
+
+#+end_src
+** Set Leader Key
+#+begin_src emacs-lisp
+  (evil-leader/set-leader "<SPC>")
+#+end_src
+
 * App
 ** Open emacs in full screen
 #+begin_src emacs-lisp
@@ -383,21 +399,6 @@ Search google for selected text
   (require 'orderless)
   (setq completion-styles '(orderless basic)
 	completion-category-overrides '((file (styles basic partial-completion))))
-#+end_src
-* Evil Leader Key Bindings
-** Install (This must come before evil)
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'evil-leader)
-    (package-install 'evil-leader))
-
-  (require 'evil-leader)
-
-  (global-evil-leader-mode 1)
-
-#+end_src
-** Set Leader Key
-#+begin_src emacs-lisp
-  (evil-leader/set-leader "<SPC>")
 #+end_src
 * Consult (Completions with Previews)
 ** Install
