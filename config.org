@@ -381,99 +381,16 @@ Search google for selected text
 
 * Roleplaying
 ** Tools
-Function for running dnd commands
 #+begin_src emacs-lisp
-  ;;(load-file "~/.emacs.d/dnd.el")
-  (defun dnd/run-dnd-command (dnd-command)
-    "Run given dnd command as a shell command"
-    (interactive)
-    (shell-command (concat "export PATH=$PATH:~/bin && dnd " dnd-command) "*DnD Output*"))
-#+end_src
-*** NPC
-#+begin_src emacs-lisp
-  (defun dnd/npc ()
-    "Generate NPC"
-    (interactive)
-    (dnd/run-dnd-command "npc"))
+  (load-file "~/.emacs.d/dnd.el")
 
   (evil-leader/set-key
-    "d n" 'dnd/npc)
-#+end_src
-*** Urban 
-#+begin_src emacs-lisp
-  (defun dnd/urban ()
-    "Generate urban location"
-    (interactive)
-    (dnd/run-dnd-command "urban"))
-
-  (evil-leader/set-key
-    "d u" 'dnd/urban)
-#+end_src
-*** Keywords 
-#+begin_src emacs-lisp
-  (defun dnd/keywords ()
-    "Generate urban location"
-    (interactive)
-    (let ((num (read-string "Number of Keywords (2): " nil nil "2")))
-      (dnd/run-dnd-command (concat "kw " num))))
-
-  (evil-leader/set-key
-    "d k" 'dnd/keywords)
-#+end_src
-*** Roll
-#+begin_src emacs-lisp
-  (defun dnd/roll ()
-    "Roll dice <dice>+-<modifier>"
-    (interactive)
-    (let ((dice (read-string "Roll <dice>+-<modifier>: ")))
-      (dnd/run-dnd-command (concat "roll " dice))))
-
-  (evil-leader/set-key
-    "d r" 'dnd/roll)
-#+end_src
-*** Oracle
-#+begin_src emacs-lisp
-  (defun dnd/oracle ()
-    "Ask the oracle a yes/no question.
-   - Chaos factor ranges from 1 to 9
-   - Odds range from -4 to 6 with 0 being 50/50
-       -4 Impossible
-       -3 No way
-       -2 Very unlikely
-       -1 Unlikely
-	0 50/50
-	1 Somewhat likely
-	2 Likely
-	3 Very likely
-	4 Near a sure thing
-	5 A sure thing
-	6 Has to be"
-    (interactive)
-    (let ((chaos-factor (read-string "Chaos Factor (1 to 9): "))
-	  (odds (read-string "Odds (-4 to 6): ")))
-      (dnd/run-dnd-command (concat "oracle " chaos-factor " " odds))))
-
-  (evil-leader/set-key
-      "d o" 'dnd/oracle)
-#+end_src
-*** Event
-#+begin_src emacs-lisp
-  (defun dnd/event ()
-    "Generate event"
-    (interactive)
-    (dnd/run-dnd-command "event"))
-
-  (evil-leader/set-key
-    "d e" 'dnd/event)
-#+end_src
-*** Combat
-#+begin_src emacs-lisp
-  (defun dnd/combat ()
-    "Generate combat description"
-    (interactive)
-    (dnd/run-dnd-command "combat"))
-
-  (evil-leader/set-key
+    "d n" 'dnd/npc
+    "d u" 'dnd/urban
+    "d k" 'dnd/keywords
+    "d r" 'dnd/roll
+    "d o" 'dnd/oracle
+    "d e" 'dnd/event
     "d c" 'dnd/combat)
 #+end_src
 * Fuzzy Matching
