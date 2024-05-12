@@ -61,6 +61,28 @@
 #+begin_src emacs-lisp
   (doom-themes-visual-bell-config)
 #+end_src
+* Modeline
+Install Nerd Fonts first from terminal
+#+begin_src bash
+  brew tap homebrew/cask-fonts
+  brew install --cask font-symbols-only-nerd-font
+#+end_src
+** Install Nerd Fonts
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'nerd-icons)
+    (package-install 'nerd-icons))
+
+  (require 'nerd-icons)
+#+end_src
+** Install Doom Modeline
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'doom-modeline)
+    (package-install 'doom-modeline))
+
+  (require 'doom-modeline)
+
+  (doom-modeline-mode 1)
+#+end_src
 * Font Size
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil :height 150)
@@ -214,6 +236,7 @@
     "h f" 'describe-function
     "h k" 'describe-key
     "h v" 'describe-variable
+    "h b" 'describe-bindings
     "h m" 'describe-mode)
 #+end_src
 * Software
