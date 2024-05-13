@@ -1,24 +1,8 @@
-* Melpa
-#+begin_src emacs-lisp
-  (require 'package)
-
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-  ;; and `package-pinned-packages`. Most users will not need or want to do this.
-  ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (package-initialize)
-  (package-refresh-contents)
-#+end_src
 * Evil Leader (This must come before evil)
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'evil-leader)
-    (package-install 'evil-leader))
-
   (require 'evil-leader)
-
   (global-evil-leader-mode 1)
-
 #+end_src
 ** Set Leader Key
 #+begin_src emacs-lisp
@@ -43,9 +27,6 @@
 * Theme
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'doom-themes)
-    (package-install 'doom-themes))
-
   (require 'doom-themes)
 #+end_src
 ** Activate theme
@@ -69,18 +50,11 @@ Install Nerd Fonts first from terminal
 #+end_src
 ** Install Nerd Fonts
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'nerd-icons)
-    (package-install 'nerd-icons))
-
   (require 'nerd-icons)
 #+end_src
 ** Install Doom Modeline
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'doom-modeline)
-    (package-install 'doom-modeline))
-
   (require 'doom-modeline)
-
   (doom-modeline-mode 1)
 #+end_src
 * Font Size
@@ -94,11 +68,7 @@ Install Nerd Fonts first from terminal
 #+end_src
 * Rainbow Delimiters
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'rainbow-delimiters)
-    (package-install 'rainbow-delimiters))
-
   (require 'rainbow-delimiters)
-
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 * File
@@ -156,11 +126,6 @@ Install Nerd Fonts first from terminal
     "/" 'consult-line)
 #+end_src
 * Window
-** Install Ace Window
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'ace-window)
-    (package-install 'ace-window))
-#+end_src
 ** Key Bindings
 #+begin_src emacs-lisp
   (evil-leader/set-key
@@ -173,9 +138,6 @@ Install Nerd Fonts first from terminal
 * Workspaces
 ** Install Perspective
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'perspective)
-    (package-install 'perspective))
-
   (require 'perspective)
 
   (global-set-key (kbd "C-x C-b") 'persp-list-buffers)
@@ -225,6 +187,19 @@ Install Nerd Fonts first from terminal
     "p 0" 'my/switch-workspace-10)
 #+end_src
 
+* Minibuffer
+** Keybinding
+Paste in the minibuffer
+#+begin_src emacs-lisp
+  (define-key minibuffer-local-map (kbd "M-v") 'yank)
+#+end_src
+* Spelling
+#+begin_src emacs-lisp
+  (setq ispell-program-name "/opt/homebrew/bin/aspell")
+
+  (evil-leader/set-key
+    "s c" 'ispell)
+#+end_src
 * Help
 ** Select Help Window When Opening
 #+begin_src emacs-lisp
@@ -263,9 +238,6 @@ Install Nerd Fonts first from terminal
 #+end_src
 ** Bullets
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'org-bullets)
-    (package-install 'org-bullets))
-
   (require 'org-bullets)
 
   (add-hook 'org-mode-hook
@@ -297,9 +269,6 @@ Install Nerd Fonts first from terminal
 * Autocomplete
 ** Install Company
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'company)
-    (package-install 'company))
-
   (require 'company)
 
   (add-hook 'after-init-hook 'global-company-mode)
@@ -307,9 +276,6 @@ Install Nerd Fonts first from terminal
 * RSS Reader
 ** Install Elfeed
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'elfeed)
-    (package-install 'elfeed))
-
   (require 'elfeed)
 #+end_src
 ** Feeds
@@ -419,9 +385,6 @@ Search google for selected text
 * Fuzzy Matching
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'orderless)
-    (package-install 'orderless))
-
   (require 'orderless)
   (setq completion-styles '(orderless basic)
 	completion-category-overrides '((file (styles basic partial-completion))))
@@ -429,17 +392,11 @@ Search google for selected text
 * Consult (Completions with Previews)
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'consult)
-    (package-install 'consult))
-
   (require 'consult)
 #+end_src
 * Evil Mode
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'evil)
-    (package-install 'evil))
-
   (setq evil-want-C-i-jump nil)
 
   (require 'evil)
@@ -483,21 +440,13 @@ Search google for selected text
 #+end_src
 * Which Key (Key Binding Suggestions)
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'which-key)
-    (package-install 'which-key))
-
   (require 'which-key)
-
   (which-key-mode 1)
 #+end_src
 * Vertico (List Suggestions)
 ** Install
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'vertico)
-    (package-install 'vertico))
-
   (require 'vertico)
-
   (vertico-mode 1)
 #+end_src
 ** Cycle results
@@ -506,10 +455,6 @@ Search google for selected text
 #+end_src
 * Marginalia (Suggestion Hints)
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'marginalia)
-    (package-install 'marginalia))
-
   (require 'marginalia)
-
   (marginalia-mode 1)
 #+end_src
