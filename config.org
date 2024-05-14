@@ -330,6 +330,13 @@ Search google for selected text
     "g s" 'my/google-search)
 #+end_src
 * Programming
+** Org Babel Languages
+#+begin_src emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+			       '((java . t)))
+#+end_src
 ** Key Bindings
 *** Toggle View Code Block
 #+begin_src emacs-lisp
