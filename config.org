@@ -333,9 +333,11 @@ Search google for selected text
 ** Org Babel Languages
 #+begin_src emacs-lisp
   (setq org-confirm-babel-evaluate nil)
+  (setq org-babel-python-command "python3")
 
-  (org-babel-do-load-languages 'org-babel-load-languages
-			       '((java . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((java . t)
+			       (python . t)))
 #+end_src
 ** Key Bindings
 *** Toggle View Code Block
