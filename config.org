@@ -1,5 +1,6 @@
-#+SETUPFILE: ~/.emacs.d/org-html-themes/org/theme-readtheorg.setup
-
+* Export to html
+Put this at the top of the file: #+SETUPFILE: ~/.emacs.d/org-html-themes/org/theme-readtheorg.setup
+You can download theme from [[https://github.com/fniessen/org-html-themes][here]]
 * Evil Leader (This must come before evil)
 ** Install
 #+begin_src emacs-lisp
