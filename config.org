@@ -249,6 +249,17 @@ Paste in the minibuffer
   (require 'org-tempo)
 #+end_src
 
+** Org agenda
+*** Open org agenda
+#+begin_src emacs-lisp
+  (evil-leader/set-key-for-mode 'org-mode
+    "a a" 'org-agenda)
+#+end_src
+*** Add file to org agenda
+#+begin_src emacs-lisp
+  (evil-leader/set-key-for-mode 'org-mode
+   "a f" 'org-agenda-file-to-front)
+#+end_src
 ** Key Bindings
 **** Open link in browser
 #+begin_src emacs-lisp
@@ -282,7 +293,8 @@ Paste in the minibuffer
 #+begin_src emacs-lisp
   (setq elfeed-feeds
 	'("https://protesilaos.com/master.xml"
-	  "https://hnrss.org/frontpage"))
+	  "https://hnrss.org/frontpage"
+	  "https://sachachua.com/blog/feed/index.xml"))
 
   (elfeed-update)
 #+end_src
