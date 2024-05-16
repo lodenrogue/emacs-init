@@ -1,6 +1,10 @@
 * Export to html
 Put this at the top of the file: #+SETUPFILE: ~/.emacs.d/org-html-themes/org/theme-readtheorg.setup
 You can download theme from [[https://github.com/fniessen/org-html-themes][here]]
+* Load Common Functions
+#+begin_src emacs-lisp
+  (load-file "~/.emacs.d/common-functions.el")
+#+end_src
 * Evil Leader (This must come before evil)
 ** Install
 #+begin_src emacs-lisp
@@ -263,12 +267,20 @@ Paste in the minibuffer
   (evil-leader/set-key-for-mode 'org-mode
    "a f" 'org-agenda-file-to-front)
 #+end_src
+** Org Capture
+More info on capture templates [[https://orgmode.org/manual/Capture-templates.html][here]]
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+	'(("i" "Inbox" entry (file+headline "~/gtd/inbox.org" "Inbox")
+	   "* TODO %?")))
+#+end_src
 ** Workflow states (TODO, etc)
 #+begin_src emacs-lisp
   (setq org-todo-keywords
 	'((sequence "TODO" "NEXT" "IN PROGRESS" "WAITING" "|" "DONE")))
 #+end_src
 ** Archive
+Archive the current org node
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "o r" 'org-archive-subtree-default)
@@ -278,6 +290,22 @@ Paste in the minibuffer
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "o l" 'org-open-at-point)
+#+end_src
+* GTD
+** Move to inbox
+#+begin_src emacs-lisp
+  (defun my/send-to-inbox ()
+    "Send selected text to inbox"
+    (interactive)
+    (let ((selected-text (my/grab-selected-text)))
+      (if selected-text
+	  (progn
+	    (write-region selected-text nil "~/gtd/inbox.org" 'append)
+	    (delete-region (region-beginning) (region-end)))
+	(error "Error: No text selected"))))
+
+  (evil-leader/set-key
+    "s t i" 'my/send-to-inbox)
 #+end_src
 * Abbreviations
 ** Python
@@ -335,14 +363,6 @@ Paste in the minibuffer
 *** Search Google
 Search google for selected text
 #+begin_src emacs-lisp
-  (defun my/grab-selected-text ()
-    "Grab the text selected in visual mode and return it as a string."
-    (interactive)
-    (when (region-active-p)
-      (let ((start (region-beginning))
-	    (end (region-end)))
-	(buffer-substring-no-properties start end))))
-
   (defun my/google-search ()
     "Use google search on selected text"
     (interactive)
