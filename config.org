@@ -263,6 +263,16 @@ Paste in the minibuffer
   (evil-leader/set-key-for-mode 'org-mode
    "a f" 'org-agenda-file-to-front)
 #+end_src
+** Workflow states (TODO, etc)
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+	'((sequence "TODO" "NEXT" "IN PROGRESS" "WAITING" "|" "DONE")))
+#+end_src
+** Archive
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o r" 'org-archive-subtree-default)
+#+end_src
 ** Key Bindings
 **** Open link in browser
 #+begin_src emacs-lisp
