@@ -98,6 +98,23 @@ Install Nerd Fonts first from terminal
   (add-to-list 'recentf-exclude
 	       (recentf-expand-file-name "~/.elfeed/index"))
 #+end_src
+** File tree
+*** Install
+#+begin_src emacs-lisp
+  (require 'neotree)
+#+end_src
+*** Keybindings
+#+begin_src emacs-lisp
+  (defun my/toggle-file-tree ()
+    "Toggle show the file tree"
+    (interactive)
+    (if (neo-global--window-exists-p)
+	(neotree-hide)
+      (neotree-dir default-directory)))
+
+  (evil-leader/set-key
+    "f t" 'my/toggle-file-tree)
+#+end_src
 ** Key Bindings
 *** Open Init File
 #+begin_src emacs-lisp
@@ -116,6 +133,15 @@ Install Nerd Fonts first from terminal
     "f r" 'consult-recent-file)
 #+end_src
 * Buffer
+** Search Buffer
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "/" 'consult-line)
+#+end_src
+** Autoload changes when file edited outside emacs
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+#+end_src
 ** Key Bindings
 #+begin_src emacs-lisp
   (evil-leader/set-key
@@ -126,11 +152,6 @@ Install Nerd Fonts first from terminal
     "b p" 'previous-buffer
     "<left>" 'previous-buffer
     "b k" 'kill-buffer)
-#+end_src
-** Search Buffer
-#+begin_src emacs-lisp
-  (evil-leader/set-key
-    "/" 'consult-line)
 #+end_src
 * Window
 ** Key Bindings
@@ -259,7 +280,7 @@ Paste in the minibuffer
 ** Org agenda
 *** Open org agenda
 #+begin_src emacs-lisp
-  (evil-leader/set-key-for-mode 'org-mode
+  (evil-leader/set-key
     "a a" 'org-agenda)
 #+end_src
 *** Add file to org agenda
@@ -267,12 +288,23 @@ Paste in the minibuffer
   (evil-leader/set-key-for-mode 'org-mode
    "a f" 'org-agenda-file-to-front)
 #+end_src
+*** Add item to schedule
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o s" 'org-schedule)
+#+end_src
 ** Org Capture
+*** Templates
 More info on capture templates [[https://orgmode.org/manual/Capture-templates.html][here]]
 #+begin_src emacs-lisp
   (setq org-capture-templates
 	'(("i" "Inbox" entry (file+headline "~/gtd/inbox.org" "Inbox")
 	   "* TODO %?")))
+#+end_src
+*** Keybindings
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o c" 'org-capture)
 #+end_src
 ** Workflow states (TODO, etc)
 #+begin_src emacs-lisp
@@ -283,7 +315,7 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
 Archive the current org node
 #+begin_src emacs-lisp
   (evil-leader/set-key
-    "o r" 'org-archive-subtree-default)
+    "o a" 'org-archive-subtree-default)
 #+end_src
 ** Key Bindings
 **** Open link in browser
@@ -292,7 +324,7 @@ Archive the current org node
     "o l" 'org-open-at-point)
 #+end_src
 * GTD
-** Move to inbox
+** Move item to inbox
 #+begin_src emacs-lisp
   (defun my/send-to-inbox ()
     "Send selected text to inbox"
@@ -306,6 +338,31 @@ Archive the current org node
 
   (evil-leader/set-key
     "s t i" 'my/send-to-inbox)
+#+end_src
+** Move item to projects
+#+begin_src emacs-lisp
+  (defun my/send-to-projects ()
+    "Send selected text to projects"
+    (interactive)
+    (let ((selected-text (my/grab-selected-text)))
+      (if selected-text
+	  (progn
+	    (write-region selected-text nil "~/gtd/projects.org" 'append)
+	    (delete-region (region-beginning) (region-end)))
+	(error "Error: No text selected"))))
+
+  (evil-leader/set-key
+    "s t p" 'my/send-to-projects)
+#+end_src
+** Open inbox
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o i" (lambda () (interactive) (find-file "~/gtd/inbox.org")))
+#+end_src
+** Open projects
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o p" (lambda () (interactive) (find-file "~/gtd/projects.org")))
 #+end_src
 * Abbreviations
 ** Python
@@ -340,23 +397,36 @@ Archive the current org node
   (elfeed-update)
 #+end_src
 * Terminal
+** Install
+#+begin_src emacs-lisp
+  (require 'multi-term)
+#+end_src
 ** Key Bindings
 #+begin_src emacs-lisp
-  (defun my/create-shell ()
-    "Create a shell buffer with a unique name."
-    (interactive)
-    (term "/bin/zsh"))
-
   (defun my/create-small-shell ()
     "Create a shell buffer in a window below current buffer."
     (interactive)
     (split-window-below)
     (other-window 1)
-    (my/create-shell))
+    (multi-term))
 
   (evil-leader/set-key
     "t s" 'my/create-small-shell
-    "t t" 'my/create-shell)
+    "t t" 'multi-term)
+#+end_src
+* IDE
+#+begin_src emacs-lisp
+  (defun my/ide ()
+    "Create python ide window configuration"
+    (interactive)
+    (let ((working-directory (read-directory-name "Working Directory: ")))
+      (delete-other-windows)
+      (cd working-directory)
+      (neotree-dir default-directory)
+      (other-window 1)))
+
+  (evil-leader/set-key
+    "i d e" 'my/ide)
 #+end_src
 * Web
 ** Key Bindings
@@ -457,10 +527,14 @@ Search google for selected text
 
   (evil-mode 1)
 #+end_src
-
 ** Activate redo
 #+begin_src emacs-lisp
   (evil-set-undo-system 'undo-redo)
+#+end_src
+** Evil collection
+#+begin_src emacs-lisp
+  (require 'evil-collection)
+  (evil-collection-init '(neotree))
 #+end_src
 ** Key bindings
 *** Scrolling up
@@ -475,13 +549,11 @@ Search google for selected text
 #+begin_src emacs-lisp
   (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
 #+end_src
-
 *** Paste
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "M-v") 'yank)
   (define-key evil-insert-state-map (kbd "M-v") 'yank)
 #+end_src
-
 *** Elfeed
 #+begin_src emacs-lisp
   (evil-define-key 'normal elfeed-search-mode-map (kbd "u") #'elfeed-search-tag-all-unread)

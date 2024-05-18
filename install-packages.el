@@ -43,6 +43,7 @@
 (unless (package-installed-p 'consult)
   (package-install 'consult))
 
+(setq evil-want-keybinding nil)
 (unless (package-installed-p 'evil)
   (package-install 'evil))
 
@@ -54,3 +55,12 @@
 
 (unless (package-installed-p 'marginalia)
   (package-install 'marginalia))
+
+(unless (package-installed-p 'multi-term)
+  (package-install 'multi-term))
+
+(unless (package-installed-p 'evil-collection)
+  (package-install 'evil-collection))
+
+(unless (package-installed-p 'neotree)
+  (package-install 'neotree))
