@@ -155,7 +155,7 @@ Install Nerd Fonts first from terminal
     "<right>" 'next-buffer
     "b p" 'previous-buffer
     "<left>" 'previous-buffer
-    "b k" 'kill-buffer)
+    "b k" 'kill-current-buffer)
 #+end_src
 * Window
 ** Key Bindings
@@ -229,6 +229,64 @@ Paste in the minibuffer
 *** Exit minibuffer
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+* Registers
+** View register contents
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "r v" 'view-register)
+#+end_src
+** Text
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "r s t" 'copy-to-register
+    "r a t" 'append-to-register
+    "r p t" 'prepend-to-register
+    "r i t" 'insert-register)
+#+end_src
+** Rectangles
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "r s r" 'copy-rectangle-to-register
+    "r i r" 'insert-register)
+#+end_src
+** Files
+#+begin_src emacs-lisp
+  (defun my/register-save-file ()
+    "Save file name to given register"
+    (interactive)
+    (if (buffer-file-name)
+	(let ((register (read-char "Copy to register: ")))
+	  (set-register register `(file . ,(buffer-file-name))))
+      (error "Error: Not currently visiting a file")))
+
+  (evil-leader/set-key
+    "r s f" 'my/register-save-file
+    "r j f" 'jump-to-register)
+#+end_src
+** Buffer
+#+begin_src emacs-lisp
+  (defun my/register-save-buffer ()
+    "Save file name to given register"
+    (interactive)
+    (let ((register (read-char "Copy to register: ")))
+      (set-register register `(buffer . ,(buffer-name)))))
+
+  (evil-leader/set-key
+    "r s b" 'my/register-save-buffer
+    "r j b" 'jump-to-register)
+#+end_src
+** Buffer positions
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "r s p" 'point-to-register
+    "r j p" 'jump-to-register)
+#+end_src
+** Window
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "r s w" 'window-configuration-to-register
+    "r l w" 'jump-to-register)
 #+end_src
 * Spelling
 #+begin_src emacs-lisp
