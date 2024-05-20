@@ -15,7 +15,6 @@ You can download theme from [[https://github.com/fniessen/org-html-themes][here]
 #+begin_src emacs-lisp
   (evil-leader/set-leader "<SPC>")
 #+end_src
-
 * App
 ** Open emacs in full screen
 #+begin_src emacs-lisp
@@ -309,7 +308,7 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
 ** Workflow states (TODO, etc)
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-	'((sequence "TODO" "NEXT" "IN PROGRESS" "WAITING" "|" "DONE")))
+	'((sequence "PROJ" "TODO" "NEXT" "IN PROGRESS" "DELETAGED" "WAITING" "|" "DONE")))
 #+end_src
 ** Archive
 Archive the current org node
@@ -386,6 +385,10 @@ Archive the current org node
 ** Install Elfeed
 #+begin_src emacs-lisp
   (require 'elfeed)
+#+end_src
+** Refresh Elfeed on open
+#+begin_src emacs-lisp
+  (advice-add 'elfeed :before #'elfeed-update)
 #+end_src
 ** Feeds
 #+begin_src emacs-lisp
