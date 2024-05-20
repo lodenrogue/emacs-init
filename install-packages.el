@@ -64,3 +64,6 @@
 
 (unless (package-installed-p 'neotree)
   (package-install 'neotree))
+
+(unless (package-installed-p 'smartparens)
+  (package-install 'smartparens))

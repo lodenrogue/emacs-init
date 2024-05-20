@@ -72,6 +72,11 @@ Install Nerd Fonts first from terminal
   (setq-default display-line-numbers-type 'relative)
   (global-display-line-numbers-mode 1)
 #+end_src
+* Smartparens
+#+begin_src emacs-lisp
+  (require 'smartparens-config)
+  (smartparens-global-mode t)
+#+end_src
 * Rainbow Delimiters
 #+begin_src emacs-lisp
   (require 'rainbow-delimiters)
@@ -216,9 +221,14 @@ Install Nerd Fonts first from terminal
 
 * Minibuffer
 ** Keybinding
+*** Paste
 Paste in the minibuffer
 #+begin_src emacs-lisp
   (define-key minibuffer-local-map (kbd "M-v") 'yank)
+#+end_src
+*** Exit minibuffer
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
 * Spelling
 #+begin_src emacs-lisp
