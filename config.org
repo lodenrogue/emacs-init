@@ -376,7 +376,7 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
 ** Workflow states (TODO, etc)
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-	'((sequence "PROJ" "TODO" "NEXT" "IN PROGRESS" "DELETAGED" "WAITING" "|" "DONE")))
+	'((sequence "PROJ" "TODO" "NEXT" "IN PROGRESS" "SCHEDULED" "DELEGATED" "WAITING" "|" "DONE")))
 #+end_src
 ** Archive
 Archive the current org node
