@@ -92,9 +92,7 @@ Install Nerd Fonts first from terminal
 *** Configure recent files
 #+begin_src emacs-lisp
   (require 'recentf)
-
   (recentf-mode 1)
-
   (setq recentf-max-menu-items 25)
 #+end_src
 *** Ignore files
@@ -165,6 +163,7 @@ Install Nerd Fonts first from terminal
     "w k" 'delete-window
     "w h" (lambda () (interactive) (split-window-below) (other-window 1))
     "w v" (lambda () (interactive) (split-window-right) (other-window 1))
+    "w s" 'ace-swap-window
     "w w" 'ace-window) ;; Switch between windows
 #+end_src
 * Workspaces
@@ -390,6 +389,11 @@ Archive the current org node
   (evil-leader/set-key
     "o l" 'org-open-at-point)
 #+end_src
+**** Timestamp
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "o t" 'org-time-stamp)
+#+end_src
 * GTD
 ** Move item to inbox
 #+begin_src emacs-lisp
@@ -463,7 +467,8 @@ Archive the current org node
   (setq elfeed-feeds
 	'("https://protesilaos.com/master.xml"
 	  "https://hnrss.org/frontpage"
-	  "https://sachachua.com/blog/feed/index.xml"))
+	  "https://sachachua.com/blog/feed/index.xml"
+	  "https://takeonrules.com/index.atom"))
 
   (elfeed-update)
 #+end_src
@@ -569,13 +574,21 @@ Search google for selected text
   (load-file "~/.emacs.d/dnd.el")
 
   (evil-leader/set-key
-    "d n" 'dnd/npc
-    "d u" 'dnd/urban
-    "d k" 'dnd/keywords
-    "d r" 'dnd/roll
-    "d o" 'dnd/oracle
-    "d e" 'dnd/event
-    "d c" 'dnd/combat)
+    "d n" 'dnd/print-npc
+    "d k" 'dnd/print-keywords
+    "d r" 'dnd/print-roll
+    "d o" 'dnd/print-oracle
+    "d e" 'dnd/print-event
+    "d c" 'dnd/print-combat)
+
+  (evil-leader/set-key
+    "d i n" 'dnd/insert-npc
+    "d i u" 'dnd/insert-urban
+    "d i k" 'dnd/insert-keywords
+    "d i r" 'dnd/insert-roll
+    "d i o" 'dnd/insert-oracle
+    "d i e" 'dnd/insert-event
+    "d i c" 'dnd/insert-combat)
 #+end_src
 * Fuzzy Matching
 ** Install
