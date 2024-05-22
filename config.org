@@ -1,5 +1,5 @@
 * Export to html
-Put this at the top of the file: #+SETUPFILE: ~/.emacs.d/org-html-themes/org/theme-readtheorg.setup
+Put this at the top of the file: #+SETUPFILE: ~/.emacs.d/ rg-html-themes/org/theme-readtheorg.setup
 You can download theme from [[https://github.com/fniessen/org-html-themes][here]]
 * Load Common Functions
 #+begin_src emacs-lisp
@@ -8,7 +8,13 @@ You can download theme from [[https://github.com/fniessen/org-html-themes][here]
 * Evil Leader (This must come before evil)
 ** Install
 #+begin_src emacs-lisp
+  (setq evil-want-keybinding nil)
+
+  (unless (package-installed-p 'evil-leader)
+    (package-install 'evil-leader))
+
   (require 'evil-leader)
+
   (global-evil-leader-mode 1)
 #+end_src
 ** Set Leader Key
@@ -33,6 +39,9 @@ You can download theme from [[https://github.com/fniessen/org-html-themes][here]
 * Theme
 ** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'doom-themes)
+    (package-install 'doom-themes))
+
   (require 'doom-themes)
 #+end_src
 ** Activate theme
@@ -56,10 +65,16 @@ Install Nerd Fonts first from terminal
 #+end_src
 ** Install Nerd Fonts
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'nerd-icons)
+    (package-install 'nerd-icons))
+
   (require 'nerd-icons)
 #+end_src
 ** Install Doom Modeline
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'doom-modeline)
+    (package-install 'doom-modeline))
+
   (require 'doom-modeline)
   (doom-modeline-mode 1)
 #+end_src
@@ -74,11 +89,17 @@ Install Nerd Fonts first from terminal
 #+end_src
 * Smartparens
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'smartparens)
+    (package-install 'smartparens))
+
   (require 'smartparens-config)
   (smartparens-global-mode t)
 #+end_src
 * Rainbow Delimiters
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'rainbow-delimiters)
+    (package-install 'rainbow-delimiters))
+
   (require 'rainbow-delimiters)
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
@@ -103,7 +124,12 @@ Install Nerd Fonts first from terminal
 ** File tree
 *** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'neotree)
+    (package-install 'neotree))
+
   (require 'neotree)
+
+  (setq-default neo-show-hidden-files t)
 #+end_src
 *** Keybindings
 #+begin_src emacs-lisp
@@ -156,6 +182,12 @@ Install Nerd Fonts first from terminal
     "b k" 'kill-current-buffer)
 #+end_src
 * Window
+** Install Ace Window
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'ace-window)
+    (package-install 'ace-window))
+
+#+end_src
 ** Key Bindings
 #+begin_src emacs-lisp
   (evil-leader/set-key
@@ -169,6 +201,9 @@ Install Nerd Fonts first from terminal
 * Workspaces
 ** Install Perspective
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'perspective)
+    (package-install 'perspective))
+
   (require 'perspective)
 
   (global-set-key (kbd "C-x C-b") 'persp-list-buffers)
@@ -332,6 +367,9 @@ Paste in the minibuffer
 #+end_src
 ** Bullets
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'org-bullets)
+    (package-install 'org-bullets))
+
   (require 'org-bullets)
 
   (add-hook 'org-mode-hook
@@ -359,7 +397,7 @@ Paste in the minibuffer
   (evil-leader/set-key
     "o s" 'org-schedule)
 #+end_src
-** Org Capture
+** Org capture
 *** Templates
 More info on capture templates [[https://orgmode.org/manual/Capture-templates.html][here]]
 #+begin_src emacs-lisp
@@ -453,6 +491,9 @@ Archive the current org node
 * Autocomplete
 ** Install Company
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'company)
+    (package-install 'company))
+
   (require 'company)
 
   (add-hook 'after-init-hook 'global-company-mode)
@@ -460,6 +501,9 @@ Archive the current org node
 * RSS Reader
 ** Install Elfeed
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'elfeed)
+    (package-install 'elfeed))
+
   (require 'elfeed)
 #+end_src
 ** Refresh Elfeed on open
@@ -480,6 +524,9 @@ Archive the current org node
 * Terminal
 ** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'multi-term)
+    (package-install 'multi-term))
+
   (require 'multi-term)
 #+end_src
 ** Key Bindings
@@ -598,18 +645,30 @@ Search google for selected text
 * Fuzzy Matching
 ** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'orderless)
+    (package-install 'orderless))
+
   (require 'orderless)
+
   (setq completion-styles '(orderless basic)
 	completion-category-overrides '((file (styles basic partial-completion))))
 #+end_src
 * Consult (Completions with Previews)
 ** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'consult)
+    (package-install 'consult))
+
   (require 'consult)
 #+end_src
 * Evil Mode
 ** Install
 #+begin_src emacs-lisp
+  (setq evil-want-keybinding nil)
+
+  (unless (package-installed-p 'evil)
+    (package-install 'evil))
+
   (setq evil-want-C-i-jump nil)
 
   (require 'evil)
@@ -622,6 +681,9 @@ Search google for selected text
 #+end_src
 ** Evil collection
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'evil-collection)
+    (package-install 'evil-collection))
+
   (require 'evil-collection)
   (evil-collection-init '(neotree))
 #+end_src
@@ -658,12 +720,18 @@ Search google for selected text
 #+end_src
 * Which Key (Key Binding Suggestions)
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'which-key)
+    (package-install 'which-key))
+
   (require 'which-key)
   (which-key-mode 1)
 #+end_src
 * Vertico (List Suggestions)
 ** Install
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'vertico)
+    (package-install 'vertico))
+
   (require 'vertico)
   (vertico-mode 1)
 #+end_src
@@ -673,6 +741,9 @@ Search google for selected text
 #+end_src
 * Marginalia (Suggestion Hints)
 #+begin_src emacs-lisp
+  (unless (package-installed-p 'marginalia)
+    (package-install 'marginalia))
+
   (require 'marginalia)
   (marginalia-mode 1)
 #+end_src
