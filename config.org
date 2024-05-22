@@ -93,7 +93,7 @@ Install Nerd Fonts first from terminal
 #+begin_src emacs-lisp
   (require 'recentf)
   (recentf-mode 1)
-  (setq recentf-max-menu-items 25)
+  (setq recentf-max-menu-items 50)
 #+end_src
 *** Ignore files
 #+begin_src emacs-lisp
@@ -377,6 +377,10 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
   (setq org-todo-keywords
 	'((sequence "PROJ" "TODO" "NEXT" "IN PROGRESS" "SCHEDULED" "DELEGATED" "WAITING" "|" "DONE")))
 #+end_src
+** Add timestamp when task done
+#+begin_src emacs-lisp
+  (setq org-log-done 'time)
+#+end_src
 ** Archive
 Archive the current org node
 #+begin_src emacs-lisp
@@ -465,10 +469,11 @@ Archive the current org node
 ** Feeds
 #+begin_src emacs-lisp
   (setq elfeed-feeds
-	'("https://protesilaos.com/master.xml"
-	  "https://hnrss.org/frontpage"
+	'(("https://protesilaos.com/master.xml" emacs)
+	  ("https://hnrss.org/frontpage" hn)
 	  "https://sachachua.com/blog/feed/index.xml"
-	  "https://takeonrules.com/index.atom"))
+	  "https://takeonrules.com/index.atom"
+	  "https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA"))
 
   (elfeed-update)
 #+end_src
@@ -644,6 +649,9 @@ Search google for selected text
   (evil-define-key 'normal elfeed-search-mode-map (kbd "r") #'elfeed-search-untag-all-unread)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "q") #'elfeed-kill-buffer)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "<RET>") #'elfeed-search-show-entry) 
+
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "s") #'elfeed-search-set-filter)
+  (evil-define-key 'normal elfeed-search-mode-map (kbd "S") #'elfeed-search-clear-filter)
 
   (evil-define-key 'normal elfeed-show-mode-map (kbd "q") #'elfeed-kill-buffer)
   (evil-define-key 'normal elfeed-show-mode-map (kbd "<tab>") #'elfeed-show-next-link)
