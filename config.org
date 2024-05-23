@@ -411,9 +411,20 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
     "o c" 'org-capture)
 #+end_src
 ** Workflow states (TODO, etc)
+*** States
 #+begin_src emacs-lisp
   (setq org-todo-keywords
 	'((sequence "PROJ" "TODO" "NEXT" "IN PROGRESS" "SCHEDULED" "DELEGATED" "WAITING" "|" "DONE")))
+#+end_src
+*** Colors
+#+begin_src emacs-lisp
+  (setq org-todo-keyword-faces
+	'(("PROJ" . "#50AEEF")
+	  ("NEXT" . "#50FA7B")
+	  ("IN PROGRESS" . "#50FA7B")
+	  ("DELEGATED" . "#50FA7B")
+	  ("DONE" . "#6272a4")
+	  ("WAITING" . "#FF5555")))
 #+end_src
 ** Add timestamp when task done
 #+begin_src emacs-lisp
@@ -594,6 +605,11 @@ Search google for selected text
 
   (evil-leader/set-key
     "c v" 'my/toggle-view-code-block)
+#+end_src
+*** Evaluate expression
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "x" 'eval-last-sexp)
 #+end_src
 *** Python
 #+begin_src emacs-lisp
