@@ -376,6 +376,10 @@ Paste in the minibuffer
 	    (lambda () (org-bullets-mode 1)))
 #+end_src
 
+** Empty lines between headings
+#+begin_src emacs-lisp
+  (setq org-cycle-separator-lines -1)
+#+end_src
 ** Source blocks
 #+begin_src emacs-lisp
   (require 'org-tempo)
