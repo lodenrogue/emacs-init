@@ -252,7 +252,6 @@ Install Nerd Fonts first from terminal
     "p 9" 'my/switch-workspace-9
     "p 0" 'my/switch-workspace-10)
 #+end_src
-
 * Minibuffer
 ** Keybinding
 *** Paste
@@ -639,7 +638,6 @@ Search google for selected text
   (evil-leader/set-key-for-mode 'sh-mode
     "r b" 'my/run-file-as-bash)
 #+end_src
-
 * Roleplaying
 ** Tools
 #+begin_src emacs-lisp
@@ -705,7 +703,7 @@ Search google for selected text
     (package-install 'evil-collection))
 
   (require 'evil-collection)
-  (evil-collection-init '(neotree))
+  (evil-collection-init '(neotree help))
 #+end_src
 ** Key bindings
 *** Scrolling up
@@ -737,6 +735,11 @@ Search google for selected text
 
   (evil-define-key 'normal elfeed-show-mode-map (kbd "q") #'elfeed-kill-buffer)
   (evil-define-key 'normal elfeed-show-mode-map (kbd "<tab>") #'elfeed-show-next-link)
+#+end_src
+*** Xref
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "<RET>") #'xref-goto-xref)
 #+end_src
 * Which Key (Key Binding Suggestions)
 #+begin_src emacs-lisp
