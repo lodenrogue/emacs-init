@@ -84,7 +84,7 @@ Install Nerd Fonts first from terminal
 #+end_src
 * Line Numbers
 #+begin_src emacs-lisp
-  (setq-default display-line-numbers-type 'relative)
+  (setq-default display-line-numbers-type 'visual)
   (global-display-line-numbers-mode 1)
 #+end_src
 * Smartparens
@@ -723,7 +723,8 @@ Search google for selected text
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "ZS") (lambda () (interactive) (save-buffer)))
 #+end_src
-*** Open org accordians
+*** Org mode
+**** Open org accordians
 #+begin_src emacs-lisp
   (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
 #+end_src
