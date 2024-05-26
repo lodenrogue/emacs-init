@@ -319,7 +319,7 @@ Paste in the minibuffer
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "r s w" 'window-configuration-to-register
-    "r l w" 'jump-to-register)
+    "r l w" 'jump-to-register) ;; (r)egister (l)oad (w)indow
 #+end_src
 * Spelling
 #+begin_src emacs-lisp
@@ -374,7 +374,10 @@ Paste in the minibuffer
   (add-hook 'org-mode-hook
 	    (lambda () (org-bullets-mode 1)))
 #+end_src
-
+** Indent text in sections
+#+begin_src emacs-lisp
+  (setq org-startup-indented 1)
+#+end_src
 ** Empty lines between headings
 #+begin_src emacs-lisp
   (setq org-cycle-separator-lines -1)
@@ -383,7 +386,6 @@ Paste in the minibuffer
 #+begin_src emacs-lisp
   (require 'org-tempo)
 #+end_src
-
 ** Org agenda
 *** Open org agenda
 #+begin_src emacs-lisp
@@ -412,6 +414,13 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "o c" 'org-capture)
+#+end_src
+** Org reveal
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'ox-reveal)
+    (package-install 'ox-reveal))
+
+  (require 'ox-reveal)
 #+end_src
 ** Workflow states (TODO, etc)
 *** States
