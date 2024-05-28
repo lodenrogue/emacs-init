@@ -386,6 +386,11 @@ Paste in the minibuffer
 #+begin_src emacs-lisp
   (require 'org-tempo)
 #+end_src
+** Open links
+#+begin_src emacs-lisp
+  (setq org-return-follows-link t)
+  (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
+#+end_src
 ** Org agenda
 *** Open org agenda
 #+begin_src emacs-lisp
@@ -421,6 +426,30 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
     (package-install 'ox-reveal))
 
   (require 'ox-reveal)
+#+end_src
+** Org roam
+*** Install
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'org-roam)
+    (package-install 'org-roam))
+
+  (require 'org-roam)
+
+  (setq org-roam-directory (file-truename "~/roam"))
+
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+
+  (org-roam-db-autosync-mode)
+#+end_src
+*** Node completions
+#+begin_src emacs-lisp
+  (setq org-roam-completion-everywhere t)
+#+end_src
+*** Keybindings
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "n f" 'org-roam-node-find
+    "n i" 'org-roam-node-insert)
 #+end_src
 ** Workflow states (TODO, etc)
 *** States
@@ -729,6 +758,12 @@ Search google for selected text
 
   (require 'evil-collection)
   (evil-collection-init '(neotree help))
+#+end_src
+** Disable RET key
+This is so RET key can be used in org mode to follow links
+#+begin_src emacs-lisp
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 ** Key bindings
 *** Scrolling up
