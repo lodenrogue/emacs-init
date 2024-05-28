@@ -89,11 +89,11 @@ Install Nerd Fonts first from terminal
 #+end_src
 * Smartparens
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'smartparens)
-    (package-install 'smartparens))
-
-  (require 'smartparens-config)
-  (smartparens-global-mode t)
+;;  (unless (package-installed-p 'smartparens)
+;;    (package-install 'smartparens))
+;;
+;;  (require 'smartparens-config)
+;;  (smartparens-global-mode t)
 #+end_src
 * Rainbow Delimiters
 #+begin_src emacs-lisp
@@ -376,11 +376,11 @@ Paste in the minibuffer
 #+end_src
 ** Indent text in sections
 #+begin_src emacs-lisp
-  (setq org-startup-indented 1)
+  (setq org-startup-indented t)
 #+end_src
 ** Empty lines between headings
 #+begin_src emacs-lisp
-  (setq org-cycle-separator-lines -1)
+  ;;(setq org-cycle-separator-lines -1)
 #+end_src
 ** Source blocks
 #+begin_src emacs-lisp
@@ -490,6 +490,21 @@ Archive the current org node
   (evil-leader/set-key
     "s t p" 'my/send-to-projects)
 #+end_src
+** Move item to someday
+#+begin_src emacs-lisp
+  (defun my/send-to-someday ()
+    "Send selected text to someday"
+    (interactive)
+    (let ((selected-text (my/grab-selected-text)))
+      (if selected-text
+	  (progn
+	    (write-region selected-text nil "~/gtd/someday.org" 'append)
+	    (delete-region (region-beginning) (region-end)))
+	(error "Error: No text selected"))))
+
+  (evil-leader/set-key
+    "s t s" 'my/send-to-someday)
+#+end_src
 ** Open inbox
 #+begin_src emacs-lisp
   (evil-leader/set-key
@@ -536,11 +551,12 @@ Archive the current org node
 ** Feeds
 #+begin_src emacs-lisp
   (setq elfeed-feeds
-	'(("https://protesilaos.com/master.xml" emacs)
-	  ("https://hnrss.org/frontpage" hn)
-	  "https://sachachua.com/blog/feed/index.xml"
-	  "https://takeonrules.com/index.atom"
-	  "https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA"))
+        '(("https://protesilaos.com/master.xml" emacs)
+          ("https://hnrss.org/frontpage" hn)
+          "https://sachachua.com/blog/feed/index.xml"
+          "https://takeonrules.com/index.atom"
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA" ;; Peter Santenello
+          ))
 
   (elfeed-update)
 #+end_src
