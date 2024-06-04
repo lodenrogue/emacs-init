@@ -451,6 +451,18 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
     "n f" 'org-roam-node-find
     "n i" 'org-roam-node-insert)
 #+end_src
+*** Org roam UI
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'org-roam-ui)
+    (package-install 'org-roam-ui))
+
+  (require 'org-roam-ui)
+
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+#+end_src
 ** Workflow states (TODO, etc)
 *** States
 #+begin_src emacs-lisp
