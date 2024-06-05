@@ -166,6 +166,16 @@ Install Nerd Fonts first from terminal
   (evil-leader/set-key
     "/" 'consult-line)
 #+end_src
+** Jump to text
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'avy)
+    (package-install 'avy))
+
+  (require 'avy)
+
+  (evil-leader/set-key
+    ";" 'avy-goto-char)
+#+end_src
 ** Autoload changes when file edited outside emacs
 #+begin_src emacs-lisp
   (global-auto-revert-mode 1)
@@ -497,8 +507,13 @@ Archive the current org node
 #+end_src
 **** Timestamp
 #+begin_src emacs-lisp
+  (defun insert-timestamp ()
+    "Prompt for timestamp and insert"
+    (interactive)
+    (org-time-stamp t))
+
   (evil-leader/set-key
-    "o t" 'org-time-stamp)
+    "o t" 'insert-timestamp)
 #+end_src
 * GTD
 ** Move item to inbox
