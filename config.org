@@ -33,8 +33,14 @@ You can download theme from [[https://github.com/fniessen/org-html-themes][here]
 #+end_src
 ** Quit
 #+begin_src emacs-lisp
+  (defun quit-emacs ()
+    "Quit Emacs"
+    (interactive)
+    (httpd-stop)
+    (save-buffers-kill-terminal))
+
   (evil-leader/set-key
-    "q q" 'save-buffers-kill-terminal)
+    "q q" 'quit-emacs)
 #+end_src
 * Theme
 ** Install
@@ -165,16 +171,6 @@ Install Nerd Fonts first from terminal
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "/" 'consult-line)
-#+end_src
-** Jump to text
-#+begin_src emacs-lisp
-  (unless (package-installed-p 'avy)
-    (package-install 'avy))
-
-  (require 'avy)
-
-  (evil-leader/set-key
-    ";" 'avy-goto-char)
 #+end_src
 ** Autoload changes when file edited outside emacs
 #+begin_src emacs-lisp
@@ -444,11 +440,11 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
     (package-install 'org-roam))
 
   (require 'org-roam)
-
+  
   (setq org-roam-directory (file-truename "~/roam"))
-
+  
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-
+  
   (org-roam-db-autosync-mode)
 #+end_src
 *** Node completions
@@ -465,9 +461,9 @@ More info on capture templates [[https://orgmode.org/manual/Capture-templates.ht
 #+begin_src emacs-lisp
   (unless (package-installed-p 'org-roam-ui)
     (package-install 'org-roam-ui))
-
+  
   (require 'org-roam-ui)
-
+  
   (setq org-roam-ui-sync-theme t
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
