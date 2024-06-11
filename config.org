@@ -650,7 +650,6 @@ Archive the current org node
 * Web
 ** Key Bindings
 *** Search Google
-Search google for selected text
 #+begin_src emacs-lisp
   (defun my/google-search ()
     "Use google search on selected text"
@@ -662,6 +661,19 @@ Search google for selected text
 
   (evil-leader/set-key
     "g s" 'my/google-search)
+#+end_src
+*** Search Articles
+#+begin_src emacs-lisp
+  (defun my/article-search ()
+    "Use research gate search on selected text"
+    (interactive)
+    (let ((selected-text (my/grab-selected-text)))
+      (if selected-text
+        (browse-url (format "https://www.researchgate.net/search/publication?q=%s" (url-hexify-string selected-text)))
+        (error "Error: No text selected to search"))))
+
+  (evil-leader/set-key
+    "a s" 'my/article-search)
 #+end_src
 * Programming
 ** Org Babel Languages
