@@ -604,11 +604,11 @@ Archive the current org node
 #+begin_src emacs-lisp
   (setq elfeed-feeds
         '(("https://protesilaos.com/master.xml" emacs)
-          ("https://hnrss.org/frontpage" hn)
-          "https://sachachua.com/blog/feed/index.xml"
-          "https://takeonrules.com/index.atom"
-          "https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA" ;; Peter Santenello
-          ))
+        ("https://hnrss.org/frontpage" hn)
+        ("https://sachachua.com/blog/feed/index.xml" sachachua)
+        ("https://takeonrules.com/index.atom" takeonrules)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA" peter_santanello)
+        ("https://brandons-journal.com/feed/" brandon)))
 
   (elfeed-update)
 #+end_src
