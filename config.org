@@ -567,6 +567,22 @@ Archive the current org node
   (evil-leader/set-key
     "o p" (lambda () (interactive) (find-file "~/gtd/projects.org")))
 #+end_src
+* Research
+** Insert reference line
+#+begin_src emacs-lisp
+  (defun my/insert-reference-heading ()
+    "Insert heading for reference section"
+    (interactive)
+    (goto-char (point-max))
+    (unless (looking-at-p "^\\s-*$")
+      (insert "\n"))
+    (unless (looking-back "\n\n" 2)
+      (insert "\n"))
+    (insert "* Reference"))
+
+  (evil-leader/set-key
+    "i r" 'my/insert-reference-heading)
+#+end_src
 * Abbreviations
 ** Python
 #+begin_src emacs-lisp
@@ -607,8 +623,7 @@ Archive the current org node
         ("https://hnrss.org/frontpage" hn)
         ("https://sachachua.com/blog/feed/index.xml" sachachua)
         ("https://takeonrules.com/index.atom" takeonrules)
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA" peter_santanello)
-        ("https://brandons-journal.com/feed/" brandon)))
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UC3Vuq4Q1bKFtAiKYlwRv3oA" peter_santanello)))
 
   (elfeed-update)
 #+end_src
